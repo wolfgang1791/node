@@ -1,7 +1,8 @@
 var http = require('http'),
-    fs = require('fs')
+    fs = require('fs'),
+    parse = require('./param_parser.js');
 
-
+var funcion_parser = parse.parse;
 
 http.createServer((request, response)=>{
     
@@ -16,31 +17,21 @@ http.createServer((request, response)=>{
         
         let variables = html_string.match(/[^\{\}]+(?=\})/g);
         
-        let parametros = [];
-        var parametros_data = [];
         
-        var nombre = '';
+        
+        
 
-        if(request.url.indexOf('?') > 0){
-            var url_data = request.url.split('?');
-            parametros = url_data[1].split('&');
-        }
-
-        let aux = 0;
-        for (let i = 0; i < parametros.length; i++) {
-            aux = parametros[i].split('=');
-            parametros_data[aux[0]]=aux[1];
-        }
-
-       // nombre = parametros_data[aux[0]];
+        
+        var parametros_data = funcion_parser(request);
 
         console.log(parametros_data);
         
 
         for (let index = 0; index < variables.length; index++) {
-            var value = eval(variables[index]);
+           
+            var value = variables[index];
 
-            html_string = html_string.replace(`{${variables[index]}}`,parametros_data[aux[index]]);
+            html_string = html_string.replace(`{${variables[index]}}`,parametros_data[value]);
             
         }
 
