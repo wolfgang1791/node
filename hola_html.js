@@ -1,14 +1,14 @@
 var http = require('http'),
     fs = require('fs')
 
-// var html = fs.readFileSync('./index.html');
+
 
 
 http.createServer((request, response)=>{
-    console.log('funcion');
     
     fs.readFile('./index.html',(error, html) => {
-        response.write(html);
+        response.writeHead(200,{'Content-type':'application/json'});
+        response.write(JSON.stringify({'nombre':'Ptolomeo'}));
         response.end();
     });
     
